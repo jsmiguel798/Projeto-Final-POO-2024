@@ -3,6 +3,7 @@ package classes;
 import java.util.ArrayList;
 
 public class Clinica {
+
 	private String nomeClinica;
 	private ArrayList<Paciente> listaPacientes;
 	private ArrayList<Medico> listaMedicos;
