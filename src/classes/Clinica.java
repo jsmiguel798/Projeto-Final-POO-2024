@@ -3,7 +3,6 @@ package classes;
 import java.util.ArrayList;
 
 public class Clinica {
-
 	private String nomeClinica;
 	private ArrayList<Paciente> listaPacientes;
 	private ArrayList<Medico> listaMedicos;
@@ -12,7 +11,7 @@ public class Clinica {
 	public Clinica(String nomeClinica) {
 		this.nomeClinica = nomeClinica;
 
-		// criar instancia das lista de médicos, pacientes e consultas.
+		// criar instancia das lista de medicos, pacientes e consultas.
 
 		this.listaPacientes = new ArrayList<Paciente>();
 		this.listaMedicos = new ArrayList<Medico>();
@@ -20,15 +19,8 @@ public class Clinica {
 
 	}
 
-	public String getNomeClinica() {
-		return nomeClinica;
-	}
-
-	public void setNomeClinica(String nomeClinica) {
-		this.nomeClinica = nomeClinica;
-	}
-
 	// adicionar o paciente na lista de paciente na clinica
+
 	public void adicionarPaciente(Paciente paciente) {
 		this.listaPacientes.add(paciente);
 
@@ -44,5 +36,13 @@ public class Clinica {
 	public void adcionarConsulta(Consulta consulta) {
 		this.listaConsultas.add(consulta);
 
+	}
+
+	public String getNomeClinica() {
+		return nomeClinica;
+	}
+
+	public void setNomeClinica(String nomeClinica) {
+		this.nomeClinica = nomeClinica;
 	}
 }
