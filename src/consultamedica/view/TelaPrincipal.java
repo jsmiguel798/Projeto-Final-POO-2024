@@ -5,18 +5,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
+import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Color;
 
 public class TelaPrincipal extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtBemVindoAo;
 
 	/**
 	 * Launch the application.
@@ -26,7 +24,10 @@ public class TelaPrincipal extends JFrame {
 			public void run() {
 				try {
 					TelaPrincipal frame = new TelaPrincipal();
+					// ação para exibir no meio
+					frame.setLocationRelativeTo(frame);
 					frame.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -39,39 +40,67 @@ public class TelaPrincipal extends JFrame {
 	 */
 	public TelaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 675, 420);
-		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenu mnNewMenu = new JMenu("Paciente");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Cadastrar");
-		mntmNewMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		mnNewMenu.add(mntmNewMenuItem);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Consultar");
-		mnNewMenu.add(mntmNewMenuItem_1);
-		
-		JMenu mnNewMenu_1 = new JMenu("Médico");
-		menuBar.add(mnNewMenu_1);
+		setBounds(100, 100, 824, 511);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(143, 188, 143));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		txtBemVindoAo = new JTextField();
-		txtBemVindoAo.setFont(new Font("Times New Roman", Font.BOLD, 30));
-		txtBemVindoAo.setText("                   Bem Vindo, Ao Consultorio.");
-		txtBemVindoAo.setBounds(0, 0, 661, 361);
-		contentPane.add(txtBemVindoAo);
-		txtBemVindoAo.setColumns(10);
+
+		JButton btnNewButton_3 = new JButton("Cadastrar Médico");
+		btnNewButton_3.setBackground(new Color(248, 248, 255));
+		btnNewButton_3.setFont(new Font("Perpetua", Font.BOLD, 16));
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadastrarMedico medico = new CadastrarMedico();
+				medico.setVisible(true);
+				dispose();
+				
+			}
+		});
+		btnNewButton_3.setBounds(139, 348, 176, 36);
+		contentPane.add(btnNewButton_3);
+
+		JButton btnNewButton_2 = new JButton("Cadastrar Paciente");
+		btnNewButton_2.setBackground(new Color(255, 255, 255));
+		btnNewButton_2.setFont(new Font("Perpetua", Font.BOLD, 16));
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//chamar outra Tela
+				PacienteListar n = new PacienteListar();
+				n.setVisible(true);
+				// ao clicar nele, a jenela fecha
+				
+				dispose();
+			}
+		});
+		btnNewButton_2.setBounds(139, 271, 176, 36);
+		contentPane.add(btnNewButton_2);
+		JButton btnNewButton_1 = new JButton("Buscar Clinica");
+		btnNewButton_1.setBackground(new Color(248, 248, 255));
+		btnNewButton_1.setFont(new Font("Perpetua", Font.BOLD, 16));
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_1.setBounds(476, 348, 176, 36);
+		contentPane.add(btnNewButton_1);
+
+		JButton btnNewButton = new JButton("Cadastrar Consulta");
+		btnNewButton.setBackground(new Color(248, 248, 255));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setFont(new Font("Perpetua", Font.BOLD, 16));
+		btnNewButton.setBounds(476, 271, 176, 36);
+		contentPane.add(btnNewButton);
+
+		JLabel lblNewLabel = new JLabel(" Sistema de Gerenciamento de Pacientes e Consultas Médicas");
+		lblNewLabel.setFont(new Font("Felix Titling", Font.BOLD, 20));
+		lblNewLabel.setBounds(53, 105, 735, 90);
+		contentPane.add(lblNewLabel);
 	}
 
 }
