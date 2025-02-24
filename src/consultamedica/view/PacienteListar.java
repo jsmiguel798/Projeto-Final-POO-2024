@@ -7,9 +7,16 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import consultamedica.dao.MedicoDAO;
+import consultamedica.dao.PacienteDAO;
+import consultamedica.model.Medico;
+import consultamedica.model.Paciente;
+
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -17,6 +24,7 @@ import java.awt.Font;
 import java.awt.Label;
 import java.awt.TextField;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import java.awt.Color;
 import java.awt.Canvas;
@@ -29,12 +37,13 @@ import javax.swing.border.EtchedBorder;
 public class PacienteListar extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_1;
-	private JTextField textField;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTextField textFieldTelefone;
+	private JTextField textFieldNome;
+	private JTextField textFieldMedico;
+	private JTextField textFieldCPF;
+	private JTextField textFieldNascimento;
 	private JTable table;
+	private DefaultTableModel modelo; // duvida sobre isso
 
 	/**
 	 * Launch the application.
@@ -45,7 +54,6 @@ public class PacienteListar extends JFrame {
 				try {
 					PacienteListar frame = new PacienteListar();
 					frame.setLocationRelativeTo(frame);
-
 					frame.setVisible(true);
 
 				} catch (Exception e) {
@@ -74,20 +82,10 @@ public class PacienteListar extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JButton btnAgendarConsulta = new JButton("Agendar Consulta");
-		btnAgendarConsulta.setBackground(new Color(220, 220, 220));
-		btnAgendarConsulta.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnAgendarConsulta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnAgendarConsulta.setBounds(30, 430, 168, 25);
-		contentPane.add(btnAgendarConsulta);
-
 		JPanel panel = new JPanel();
 		panel.setBorder(
 				new TitledBorder(null, "Dados do Paciente", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 16, 848, 174);
+		panel.setBounds(20, 16, 867, 174);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -96,10 +94,10 @@ public class PacienteListar extends JFrame {
 		panel.add(Nome);
 		Nome.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
-		textField = new JTextField();
-		textField.setBounds(172, 24, 307, 19);
-		panel.add(textField);
-		textField.setColumns(10);
+		textFieldNome = new JTextField();
+		textFieldNome.setBounds(172, 24, 307, 19);
+		panel.add(textFieldNome);
+		textFieldNome.setColumns(10);
 
 		Label labelCPF = new Label("CPF* :");
 		labelCPF.setBounds(503, 22, 52, 21);
@@ -107,10 +105,10 @@ public class PacienteListar extends JFrame {
 		labelCPF.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		labelCPF.setBackground(UIManager.getColor("Button.background"));
 
-		textField_3 = new JTextField();
-		textField_3.setBounds(588, 24, 235, 19);
-		panel.add(textField_3);
-		textField_3.setColumns(10);
+		textFieldCPF = new JTextField();
+		textFieldCPF.setBounds(588, 24, 235, 19);
+		panel.add(textFieldCPF);
+		textFieldCPF.setColumns(10);
 
 		Label labelTelefone = new Label("Telefone*:");
 		labelTelefone.setBounds(503, 60, 79, 21);
@@ -118,10 +116,10 @@ public class PacienteListar extends JFrame {
 		labelTelefone.setBackground(UIManager.getColor("Button.background"));
 		labelTelefone.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
-		textField_1 = new JTextField();
-		textField_1.setBounds(588, 60, 235, 21);
-		panel.add(textField_1);
-		textField_1.setColumns(10);
+		textFieldTelefone = new JTextField();
+		textFieldTelefone.setBounds(588, 60, 235, 21);
+		panel.add(textFieldTelefone);
+		textFieldTelefone.setColumns(10);
 
 		Label labelHistorico = new Label("Hisórico Médico*:");
 		labelHistorico.setBounds(10, 104, 130, 21);
@@ -133,15 +131,15 @@ public class PacienteListar extends JFrame {
 		panel.add(labelDataDeNascimento);
 		labelDataDeNascimento.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
-		textField_4 = new JTextField();
-		textField_4.setBounds(172, 60, 307, 21);
-		panel.add(textField_4);
-		textField_4.setColumns(10);
+		textFieldNascimento = new JTextField();
+		textFieldNascimento.setBounds(172, 60, 307, 21);
+		panel.add(textFieldNascimento);
+		textFieldNascimento.setColumns(10);
 
-		textField_2 = new JTextField();
-		textField_2.setBounds(172, 106, 307, 19);
-		panel.add(textField_2);
-		textField_2.setColumns(10);
+		textFieldMedico = new JTextField();
+		textFieldMedico.setBounds(172, 106, 307, 19);
+		panel.add(textFieldMedico);
+		textFieldMedico.setColumns(10);
 
 		JButton btnCadastrarPaciente = new JButton("Cadastrar ");
 		btnCadastrarPaciente.setForeground(UIManager.getColor("Button.background"));
@@ -149,7 +147,37 @@ public class PacienteListar extends JFrame {
 		panel.add(btnCadastrarPaciente);
 		btnCadastrarPaciente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String nome = textFieldNome.getText();
+				String CPF = textFieldCPF.getText();
+				String telefone = textFieldTelefone.getText();
+				String dataNascimento = textFieldNascimento.getText();
+				String historicoMedico = textFieldMedico.getText();
 
+				if (nome.isBlank() || CPF.isBlank() || telefone.isBlank() || dataNascimento.isBlank()
+						|| historicoMedico.isBlank()) {
+					// isBlank() verifica se a string é vazia
+
+					// Mensagem de erro se tiver campo em branco
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "PopUp Dialog",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					// Criar um objeto da classe medico
+					Paciente paciente = new Paciente(nome, CPF, telefone, dataNascimento, historicoMedico);
+
+					// Adicionar o novo médico ao DAO
+					PacienteDAO.create(paciente);
+
+					// recarregar a tabela
+					carregarLinhasDaTabela();
+
+					// Limpar os campos depois que cadastrar
+					textFieldNome.setText("");
+					textFieldCPF.setText("");
+					textFieldTelefone.setText("");
+					textFieldNascimento.setText("");
+					textFieldMedico.setText("");
+
+				}
 			}
 		});
 		btnCadastrarPaciente.setBackground(SystemColor.activeCaption);
@@ -159,32 +187,82 @@ public class PacienteListar extends JFrame {
 		panel_1.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Dados do Paciente", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_1.setBounds(20, 200, 848, 220);
+		panel_1.setBounds(20, 200, 867, 255);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 21, 828, 189);
+		scrollPane.setBounds(10, 21, 847, 189);
 		panel_1.add(scrollPane);
 
-		table = new JTable();
-		table.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "Nome", "Telefone", "CPF", "Data De Nascimento", "Hist\u00F3rico M\u00E9dico" }));
+		this.modelo = new DefaultTableModel();
+
+		// Adicionando colunas da tabela
+		this.modelo.addColumn("Nome");
+		this.modelo.addColumn("CPF");
+		this.modelo.addColumn("Telefone");
+		this.modelo.addColumn("Data De Nascimento");
+		this.modelo.addColumn("Histórico Médico");
+
+		// Adicionando as linhas da tabela
+		carregarLinhasDaTabela();
+
+		// Criando a tabela, adicionando o modelo
+		this.table = new JTable(this.modelo);
+
 		scrollPane.setViewportView(table);
-		
-		JButton btnNewButton = new JButton("Voltar");
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton.setBounds(718, 430, 140, 25);
-		contentPane.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("Editar");
-		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_1.setBounds(300, 430, 101, 25);
-		contentPane.add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("Excluir");
-		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnNewButton_2.setBounds(518, 430, 101, 25);
-		contentPane.add(btnNewButton_2);
+
+		JButton btnAgendarConsulta = new JButton("Agendar Consulta");
+		btnAgendarConsulta.setBounds(10, 220, 168, 25);
+		panel_1.add(btnAgendarConsulta);
+		btnAgendarConsulta.setBackground(new Color(220, 220, 220));
+		btnAgendarConsulta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.setBounds(235, 220, 168, 25);
+		panel_1.add(btnEditar);
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnEditar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setBounds(698, 220, 140, 25);
+		panel_1.add(btnVoltar);
+		btnVoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaPrincipal voltar = new TelaPrincipal();
+				voltar.setVisible(true);
+				dispose();
+			}
+		});
+		btnVoltar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.setBounds(461, 220, 168, 25);
+		panel_1.add(btnExcluir);
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnAgendarConsulta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+
+	}
+
+	private void carregarLinhasDaTabela() {
+		// zerar os dados da tabela
+		this.modelo.setRowCount(0);
+		// Adicionando os paciente na tabela
+		ArrayList<Paciente> pacientes = PacienteDAO.list(); // Puxando os Paciente do DAO
+		for (int i = 0; i < pacientes.size(); i++) { // Jogando a lista de médicos no modelo da tabela
+			Paciente m = pacientes.get(i);
+			this.modelo.addRow(new Object[] { m.getNome(), m.getCPF(), m.getTelefone(), m.getDataNascimento(),
+					m.getHistoricoMedico() });
+		}
 	}
 }
