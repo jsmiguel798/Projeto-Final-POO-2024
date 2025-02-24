@@ -3,14 +3,17 @@ package consultamedica.model;
 public class Paciente {
 
 	private String nome;
+	private String CPF;
 	private String telefone;
 	private String dataNascimento;
 	private String historicoMedico;
 
-	public Paciente(String nome, String telefone, String dataNascimento, String historicoMedico) {
+
+	public Paciente(String nome, String CPF,String telefone, String dataNascimento, String historicoMedico) {
 		this.nome = nome;
+		this.CPF = CPF;
 		this.telefone = telefone;
-		this.dataNascimento = dataNascimento;
+		this.dataNascimento  = dataNascimento;
 		this.historicoMedico = historicoMedico;
 
 	}
@@ -47,4 +50,14 @@ public class Paciente {
 		this.historicoMedico = historicoMedico;
 	}
 
-}
+	public String getCPF() {
+		return CPF;
+	}
+
+	public void setCPF(String cPF) {
+		CPF = cPF;
+	}
+
+	}
+
+
