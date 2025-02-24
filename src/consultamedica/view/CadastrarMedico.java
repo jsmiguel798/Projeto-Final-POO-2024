@@ -45,6 +45,7 @@ public class CadastrarMedico extends JFrame {
 			public void run() {
 				try {
 					CadastrarMedico frame = new CadastrarMedico();
+					frame.setLocationRelativeTo(frame);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -122,6 +123,7 @@ public class CadastrarMedico extends JFrame {
 		textFieldTelefone.setColumns(10);
 		
 		JButton btnCadastrarMedico = new JButton("Cadastrar Médico");
+		btnCadastrarMedico.setBackground(new Color(240, 240, 240));
 		btnCadastrarMedico.setBounds(530, 92, 199, 34);
 		panel.add(btnCadastrarMedico);
 		btnCadastrarMedico.addActionListener(new ActionListener() {
@@ -175,6 +177,7 @@ public class CadastrarMedico extends JFrame {
 		this.modelo = new DefaultTableModel();
 
 		// Adicionando colunas da tabela
+		
 		this.modelo.addColumn("Nome");
 		this.modelo.addColumn("CRM");
 		this.modelo.addColumn("Especialidade");
