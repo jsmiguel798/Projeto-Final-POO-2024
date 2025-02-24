@@ -16,9 +16,6 @@ public class TelaPrincipal extends JFrame {
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -35,9 +32,7 @@ public class TelaPrincipal extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+
 	public TelaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 824, 511);
@@ -56,7 +51,7 @@ public class TelaPrincipal extends JFrame {
 				CadastrarMedico medico = new CadastrarMedico();
 				medico.setVisible(true);
 				dispose();
-				
+
 			}
 		});
 		btnNewButton_3.setBounds(139, 348, 176, 36);
@@ -67,11 +62,11 @@ public class TelaPrincipal extends JFrame {
 		btnNewButton_2.setFont(new Font("Perpetua", Font.BOLD, 16));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//chamar outra Tela
+				// chamar outra Tela
 				PacienteListar n = new PacienteListar();
 				n.setVisible(true);
 				// ao clicar nele, a jenela fecha
-				
+
 				dispose();
 			}
 		});
