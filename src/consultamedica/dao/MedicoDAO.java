@@ -13,4 +13,7 @@ public class MedicoDAO {
 	public static ArrayList<Medico> list() {
 		return medicos;
 	}
+	public static void delete(int linha) {
+		medicos.remove(linha);
+	}
 }
