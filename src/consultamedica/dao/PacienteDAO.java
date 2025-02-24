@@ -17,4 +17,12 @@ public class PacienteDAO {
 	public static void delete(int linha) {
 		pacientes.remove(linha);
 	}
+
+	public static Paciente getPaciente(int linha) {
+		return pacientes.get(linha);
+	}
+	//
+	public static void update(Paciente paciente, int linha) {
+		pacientes.set(linha, paciente);
+	}
 }

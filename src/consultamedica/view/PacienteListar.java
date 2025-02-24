@@ -14,6 +14,7 @@ import consultamedica.model.Medico;
 import consultamedica.model.Paciente;
 
 import javax.swing.JScrollPane;
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -45,6 +46,11 @@ public class PacienteListar extends JFrame {
 	private JTextField textFieldNascimento;
 	private JTable table;
 	private DefaultTableModel modelo; // duvida sobre isso
+	private JButton btnFinalizarEdição;
+	private JButton btnEditar;
+	private JButton btnExcluir;
+	private JButton btnAgendarConsulta;
+	private JButton btnCadastrarPaciente;
 
 	/**
 	 * Launch the application.
@@ -86,7 +92,7 @@ public class PacienteListar extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBorder(
 				new TitledBorder(null, "Dados do Paciente", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(20, 16, 867, 174);
+		panel.setBounds(20, 10, 867, 174);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -123,7 +129,7 @@ public class PacienteListar extends JFrame {
 		textFieldTelefone.setColumns(10);
 
 		Label labelHistorico = new Label("Hisórico Médico*:");
-		labelHistorico.setBounds(10, 104, 130, 21);
+		labelHistorico.setBounds(10, 96, 130, 21);
 		panel.add(labelHistorico);
 		labelHistorico.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
@@ -138,11 +144,11 @@ public class PacienteListar extends JFrame {
 		textFieldNascimento.setColumns(10);
 
 		textFieldMedico = new JTextField();
-		textFieldMedico.setBounds(172, 106, 307, 19);
+		textFieldMedico.setBounds(172, 98, 307, 19);
 		panel.add(textFieldMedico);
 		textFieldMedico.setColumns(10);
 
-		JButton btnCadastrarPaciente = new JButton("Cadastrar ");
+		btnCadastrarPaciente = new JButton("Cadastrar ");
 		btnCadastrarPaciente.setForeground(UIManager.getColor("Button.background"));
 		btnCadastrarPaciente.setBounds(611, 127, 212, 37);
 		panel.add(btnCadastrarPaciente);
@@ -182,7 +188,62 @@ public class PacienteListar extends JFrame {
 			}
 		});
 		btnCadastrarPaciente.setBackground(SystemColor.activeCaption);
-		btnCadastrarPaciente.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnCadastrarPaciente.setFont(new Font("Tahoma", Font.BOLD, 10));
+
+		btnFinalizarEdição = new JButton("Finalizar Edição");
+		btnFinalizarEdição.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// pegar a linha que esta selecionada
+				int linhaSelecionada = table.getSelectedRow();
+
+				// pegar os valores editados
+				String nome = textFieldNome.getText();
+				String CPF = textFieldCPF.getText();
+				String telefone = textFieldTelefone.getText();
+				String dataNascimento = textFieldNascimento.getText();
+				String historicoMedico = textFieldMedico.getText();
+
+				if (nome.isBlank() || CPF.isBlank() || telefone.isBlank() || dataNascimento.isBlank()
+						|| historicoMedico.isBlank()) {
+					// isBlank() verifica se a string é vazia
+
+					// Mensagem de erro se tiver campo em branco
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "PopUp Dialog",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+
+					// Criar um objeto da classe paciente
+					Paciente paciente = new Paciente(nome, CPF, telefone, dataNascimento, historicoMedico);
+
+					// atualizar o novo paciente ao DAO
+					PacienteDAO.update(paciente, linhaSelecionada);
+
+					// recarregar a tabela
+					carregarLinhasDaTabela();
+
+					// ativar botões
+					btnCadastrarPaciente.setEnabled(true);
+					btnEditar.setEnabled(true);
+					btnExcluir.setEnabled(true);
+					btnAgendarConsulta.setEnabled(true);
+					table.setEnabled(true);
+
+					// desativar botão de finalizar Edição
+					btnFinalizarEdição.setEnabled(false);
+
+					// limpar os campos depois que editar
+					textFieldNome.setText("");
+					textFieldCPF.setText("");
+					textFieldTelefone.setText("");
+					textFieldNascimento.setText("");
+					textFieldMedico.setText("");
+				}
+			}
+		});
+		btnFinalizarEdição.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btnFinalizarEdição.setBounds(396, 127, 186, 35);
+		panel.add(btnFinalizarEdição);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(
@@ -220,20 +281,65 @@ public class PacienteListar extends JFrame {
 
 		scrollPane.setViewportView(table);
 
-		JButton btnAgendarConsulta = new JButton("Agendar Consulta");
+		btnAgendarConsulta = new JButton("Agendar Consulta");
 		btnAgendarConsulta.setBounds(10, 220, 168, 25);
 		panel_1.add(btnAgendarConsulta);
 		btnAgendarConsulta.setBackground(new Color(220, 220, 220));
-		btnAgendarConsulta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnAgendarConsulta.setFont(new Font("Tahoma", Font.BOLD, 10));
 
-		JButton btnEditar = new JButton("Editar");
+		btnEditar = new JButton("Editar");
 		btnEditar.setBounds(235, 220, 168, 25);
 		panel_1.add(btnEditar);
-		btnEditar.addActionListener(new ActionListener() {
+
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.setBounds(469, 220, 168, 25);
+		panel_1.add(btnExcluir);
+		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// pegar a linha que esta selecionada
+				int linhaSelecionada = table.getSelectedRow();
+
+				if (linhaSelecionada >= 0) {// ver se tem linha selecionada na tabela
+					// Apagar Da Listagem a linha Selecionada
+					PacienteDAO.delete(linhaSelecionada);
+					// atualizar a tabela
+					carregarLinhasDaTabela();
+				}
 			}
 		});
-		btnEditar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		btnEditar.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				// pegar a linha que esta selecionada
+				int linhaSelecionada = table.getSelectedRow();
+				if (linhaSelecionada >= 0) {// ver se tem linha selecionada na tabela
+					Paciente pacienteSelecionado = PacienteDAO.getPaciente(linhaSelecionada);
+					String nome = pacienteSelecionado.getNome();
+					textFieldNome.setText(nome);
+					String cpf = pacienteSelecionado.getCPF();
+					textFieldCPF.setText(cpf);
+					String telefone = pacienteSelecionado.getTelefone();
+					textFieldTelefone.setText(telefone);
+					String dataNascimento = pacienteSelecionado.getDataNascimento();
+					textFieldNascimento.setText(dataNascimento);
+					String historicoMedico = pacienteSelecionado.getHistoricoMedico();
+					textFieldMedico.setText(historicoMedico);
+
+					// Desativar Botôes
+					btnCadastrarPaciente.setEnabled(false);
+					btnEditar.setEnabled(false);
+					btnExcluir.setEnabled(false);
+					btnAgendarConsulta.setEnabled(false);
+					table.setEnabled(false);
+					// atiavar botão de finalizar Edição
+					btnFinalizarEdição.setEnabled(true);
+
+				}
+			}
+		});
+		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 10));
 
 		JButton btnVoltar = new JButton("Voltar");
 		btnVoltar.setBounds(698, 220, 140, 25);
@@ -245,25 +351,9 @@ public class PacienteListar extends JFrame {
 				dispose();
 			}
 		});
-		btnVoltar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 10));
 
-		JButton btnExcluir = new JButton("Excluir");
-		btnExcluir.setBounds(461, 220, 168, 25);
-		panel_1.add(btnExcluir);
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// pegar a linha que esta selecionada
-				int linhaSelecionada = table.getSelectedRow();
-				
-				if(linhaSelecionada >=0) {//ver se tem linha selecionada na tabela
-					// Apagar Da Listagem a linha Selecionada
-					PacienteDAO.delete(linhaSelecionada);
-					//atualizar a tabela
-					carregarLinhasDaTabela();
-				}
-			}
-		});
-		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btnAgendarConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
