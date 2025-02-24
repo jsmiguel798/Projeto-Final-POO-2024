@@ -5,12 +5,16 @@ import consultamedica.model.*;
 
 public class PacienteDAO {
 	private static ArrayList<Paciente> pacientes = new ArrayList<Paciente>();
-	
+
 	public static void create(Paciente paciente) {
 		pacientes.add(paciente);
 	}
-	
-	public static ArrayList<Paciente> list() {		
+
+	public static ArrayList<Paciente> list() {
 		return pacientes;
+	}
+
+	public static void delete(int linha) {
+		pacientes.remove(linha);
 	}
 }

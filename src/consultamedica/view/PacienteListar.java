@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Label;
@@ -195,7 +196,12 @@ public class PacienteListar extends JFrame {
 		scrollPane.setBounds(10, 21, 847, 189);
 		panel_1.add(scrollPane);
 
-		this.modelo = new DefaultTableModel();
+		this.modelo = new DefaultTableModel() {
+			@Override // nao deixar alterar a tabela
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
 		// Adicionando colunas da tabela
 		this.modelo.addColumn("Nome");
@@ -209,6 +215,8 @@ public class PacienteListar extends JFrame {
 
 		// Criando a tabela, adicionando o modelo
 		this.table = new JTable(this.modelo);
+		// selecionar apenas uma linha de cada vez
+		this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPane.setViewportView(table);
 
@@ -244,6 +252,15 @@ public class PacienteListar extends JFrame {
 		panel_1.add(btnExcluir);
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// pegar a linha que esta selecionada
+				int linhaSelecionada = table.getSelectedRow();
+				
+				if(linhaSelecionada >=0) {//ver se tem linha selecionada na tabela
+					// Apagar Da Listagem a linha Selecionada
+					PacienteDAO.delete(linhaSelecionada);
+					//atualizar a tabela
+					carregarLinhasDaTabela();
+				}
 			}
 		});
 		btnExcluir.setFont(new Font("Tahoma", Font.PLAIN, 14));
