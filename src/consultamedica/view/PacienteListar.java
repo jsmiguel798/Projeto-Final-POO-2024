@@ -52,8 +52,13 @@ public class PacienteListar extends JFrame {
 	private JButton btnExcluir;
 	private JButton btnAgendarConsulta;
 	private JButton btnCadastrarPaciente;
+	
+	private PacienteDAO pacienteDAO;
 
 	public PacienteListar() {
+		//chama construtor do DAO
+		this.pacienteDAO = new PacienteDAO();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 922, 524);
 
@@ -152,7 +157,7 @@ public class PacienteListar extends JFrame {
 					Paciente paciente = new Paciente(nome, CPF, telefone, dataNascimento, historicoMedico);
 
 					// Adicionar o novo médico ao DAO
-					PacienteDAO.create(paciente);
+					pacienteDAO.cadastrarPaciente(paciente);
 
 					// recarregar a tabela
 					carregarLinhasDaTabela();
@@ -171,6 +176,7 @@ public class PacienteListar extends JFrame {
 		btnCadastrarPaciente.setFont(new Font("Tahoma", Font.BOLD, 10));
 
 		btnFinalizarEdição = new JButton("Finalizar Edição");
+		btnFinalizarEdição.setEnabled(false);
 		btnFinalizarEdição.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -197,7 +203,7 @@ public class PacienteListar extends JFrame {
 					Paciente paciente = new Paciente(nome, CPF, telefone, dataNascimento, historicoMedico);
 
 					// atualizar o novo paciente ao DAO
-					PacienteDAO.update(paciente, linhaSelecionada);
+					pacienteDAO.editarPaciente(paciente, linhaSelecionada);
 
 					// recarregar a tabela
 					carregarLinhasDaTabela();
@@ -281,7 +287,7 @@ public class PacienteListar extends JFrame {
 
 				if (linhaSelecionada >= 0) {// ver se tem linha selecionada na tabela
 					// Apagar Da Listagem a linha Selecionada
-					PacienteDAO.delete(linhaSelecionada);
+					pacienteDAO.deletarPaciente(linhaSelecionada);
 					// atualizar a tabela
 					carregarLinhasDaTabela();
 				}
@@ -295,7 +301,7 @@ public class PacienteListar extends JFrame {
 				// pegar a linha que esta selecionada
 				int linhaSelecionada = table.getSelectedRow();
 				if (linhaSelecionada >= 0) {// ver se tem linha selecionada na tabela
-					Paciente pacienteSelecionado = PacienteDAO.getPaciente(linhaSelecionada);
+					Paciente pacienteSelecionado = pacienteDAO.getPaciente(linhaSelecionada);
 					String nome = pacienteSelecionado.getNome();
 					textFieldNome.setText(nome);
 					String cpf = pacienteSelecionado.getCPF();
@@ -326,7 +332,7 @@ public class PacienteListar extends JFrame {
 		panel_1.add(btnVoltar);
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Clinica voltar = new Clinica();
+				ClinicaTelaPrincipal voltar = new ClinicaTelaPrincipal();
 				voltar.setVisible(true);
 				dispose();
 			}
@@ -350,7 +356,7 @@ public class PacienteListar extends JFrame {
 		// zerar os dados da tabela
 		this.modelo.setRowCount(0);
 		// Adicionando os paciente na tabela
-		ArrayList<Paciente> pacientes = PacienteDAO.list(); // Puxando os Paciente do DAO
+		ArrayList<Paciente> pacientes = this.pacienteDAO.listarPacientes(); // Puxando os Paciente do DAO
 		for (int i = 0; i < pacientes.size(); i++) { // Jogando a lista de médicos no modelo da tabela
 			Paciente m = pacientes.get(i);
 			this.modelo.addRow(new Object[] { m.getNome(), m.getCPF(), m.getTelefone(), m.getDataNascimento(),
