@@ -7,6 +7,7 @@ public class Clinica {
 	private ArrayList<Paciente> listaPacientes;
 	private ArrayList<Medico> listaMedicos;
 	private ArrayList<Consulta> listaConsultas;
+	
 
 	public Clinica(String nomeClinica) {
 		this.nomeClinica = nomeClinica;
@@ -18,8 +19,11 @@ public class Clinica {
 		this.listaConsultas = new ArrayList<Consulta>();
 
 	}
-
+	public Clinica() {
+		
+	}
 	// adicionar o paciente na lista de paciente na clinica
+
 
 	public void adicionarPaciente(Paciente paciente) {
 		this.listaPacientes.add(paciente);
