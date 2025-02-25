@@ -6,7 +6,7 @@ public class Clinica {
 	private String nomeClinica;
 	private ArrayList<Paciente> pacientes;
 	private ArrayList<Medico> medicos;
-	private ArrayList<Consulta> listaConsultas;
+	private ArrayList<Consulta> consultas;
 
 	public Clinica(String nomeClinica) {
 		this.nomeClinica = nomeClinica;
@@ -15,7 +15,7 @@ public class Clinica {
 
 		this.pacientes = new ArrayList<Paciente>();
 		this.medicos = new ArrayList<Medico>();
-		this.listaConsultas = new ArrayList<Consulta>();
+		this.consultas = new ArrayList<Consulta>();
 	}
 	public Clinica() {
 		this.pacientes = new ArrayList<Paciente>();
@@ -44,6 +44,14 @@ public class Clinica {
 	
 	public void setMedicos(ArrayList<Medico> medicos) {
 		this.medicos = medicos;
+	}
+	
+	public ArrayList<Consulta> getConsultas() {
+		return consultas;
+	}
+	
+	public void setConsultas(ArrayList<Consulta> consultas) {
+		this.consultas = consultas;
 	}
 	
 }
