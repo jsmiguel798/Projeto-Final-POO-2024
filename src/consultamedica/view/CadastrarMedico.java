@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import consultamedica.dao.MedicoDAO;
 import consultamedica.dao.PacienteDAO;
 import consultamedica.model.Medico;
+import consultamedica.model.Paciente;
 
 import javax.swing.JSplitPane;
 import java.awt.event.ActionListener;
@@ -32,16 +33,15 @@ public class CadastrarMedico extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldNome;
-	private JTextField textFieldCrm;
+	private JTextField textFieldCRM;
 	private JTextField textFieldEspecialidade;
 	private JTextField textFieldEmail;
 	private JTextField textFieldTelefone;
 	private JTable table;
 	private DefaultTableModel modelo;
+	private JButton btnEditar;
+	private JButton btnExcluir;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -106,10 +106,10 @@ public class CadastrarMedico extends JFrame {
 		panel.add(textFieldEmail);
 		textFieldEmail.setColumns(10);
 
-		textFieldCrm = new JTextField();
-		textFieldCrm.setBounds(474, 20, 255, 19);
-		panel.add(textFieldCrm);
-		textFieldCrm.setColumns(10);
+		textFieldCRM = new JTextField();
+		textFieldCRM.setBounds(474, 20, 255, 19);
+		panel.add(textFieldCRM);
+		textFieldCRM.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel("CRM*:");
 		lblNewLabel_1.setBounds(370, 22, 46, 13);
@@ -127,14 +127,15 @@ public class CadastrarMedico extends JFrame {
 		textFieldTelefone.setColumns(10);
 
 		JButton btnCadastrarMedico = new JButton("Cadastrar Médico");
-		btnCadastrarMedico.setBackground(new Color(240, 240, 240));
+
+		// btnCadastrarMedico.setBackground(new Color(240, 240, 240));
 		btnCadastrarMedico.setBounds(530, 92, 199, 34);
 		panel.add(btnCadastrarMedico);
 		btnCadastrarMedico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Pega os valores que estão nos campos de texto
 				String nome = textFieldNome.getText();
-				String crm = textFieldCrm.getText();
+				String crm = textFieldCRM.getText();
 				String especialidade = textFieldEspecialidade.getText();
 				String email = textFieldEmail.getText();
 				String telefone = textFieldTelefone.getText();
@@ -157,14 +158,69 @@ public class CadastrarMedico extends JFrame {
 
 					// Limpar os campos depois que cadastrar
 					textFieldNome.setText("");
-					textFieldCrm.setText("");
+					textFieldCRM.setText("");
 					textFieldEspecialidade.setText("");
 					textFieldEmail.setText("");
 					textFieldTelefone.setText("");
 				}
 			}
 		});
-		btnCadastrarMedico.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnCadastrarMedico.setFont(new Font("Tahoma", Font.BOLD, 10));
+
+		JButton btnFinalizarEdição = new JButton("Finalizar Edição");
+		btnFinalizarEdição.setEnabled(false);
+		btnFinalizarEdição.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// pegar a linha que esta selecionada
+				int linhaSelecionada = table.getSelectedRow();
+
+				// pegar os valores editados
+				String nome = textFieldNome.getText();
+				String CRM = textFieldCRM.getText();
+				String telefone = textFieldTelefone.getText();
+				String especialidade = textFieldEspecialidade.getText();
+				String email = textFieldEmail.getText();
+
+				if (nome.isBlank() || CRM.isBlank() || telefone.isBlank() || especialidade.isBlank()
+						|| email.isBlank()) {
+					// isBlank() verifica se a string é vazia
+
+					// Mensagem de erro se tiver campo em branco
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "PopUp Dialog",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+
+					// Criar um objeto da classe paciente
+					Medico medico = new Medico(nome, CRM, telefone, especialidade, email);
+
+					// atualizar o novo paciente ao DAO
+					MedicoDAO.update(medico, linhaSelecionada);
+
+					// recarregar a tabela
+					carregarLinhasDaTabela();
+
+					// ativar botões
+					btnCadastrarMedico.setEnabled(true);
+					btnEditar.setEnabled(true);
+					btnExcluir.setEnabled(true);
+					table.setEnabled(true);
+
+					// desativar botão de finalizar Edição
+					btnFinalizarEdição.setEnabled(false);
+
+					// limpar os campos depois que editar
+					textFieldNome.setText("");
+					textFieldCRM.setText("");
+					textFieldTelefone.setText("");
+					textFieldEspecialidade.setText("");
+					textFieldEmail.setText("");
+
+				}
+			}
+		});
+		btnFinalizarEdição.setBounds(314, 92, 172, 30);
+		panel.add(btnFinalizarEdição);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Listagem dos M\u00E9dicos", TitledBorder.LEADING, TitledBorder.TOP,
@@ -204,12 +260,12 @@ public class CadastrarMedico extends JFrame {
 
 		scrollPane.setViewportView(table);
 
-		JButton btnNewButton = new JButton("Editar");
-		btnNewButton.setBounds(10, 289, 199, 34);
-		panel_1.add(btnNewButton);
+		btnEditar = new JButton("Editar");
+		btnEditar.setBounds(10, 289, 199, 34);
+		panel_1.add(btnEditar);
 
-		JButton btnNewButton_1 = new JButton("Excluir");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btnExcluir = new JButton("Excluir");
+		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// pegar a linha que esta selecionada
 				int linhaSelecionada = table.getSelectedRow();
@@ -221,22 +277,46 @@ public class CadastrarMedico extends JFrame {
 				}
 			}
 		});
-		btnNewButton_1.setBounds(267, 289, 196, 34);
-		panel_1.add(btnNewButton_1);
+		btnExcluir.setBounds(267, 289, 196, 34);
+		panel_1.add(btnExcluir);
 
-		JButton btnNewButton_3 = new JButton("Voltar");
-		btnNewButton_3.setBounds(530, 290, 196, 33);
-		panel_1.add(btnNewButton_3);
-		btnNewButton_3.addActionListener(new ActionListener() {
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.setBounds(530, 290, 196, 33);
+		panel_1.add(btnVoltar);
+		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TelaPrincipal voltar = new TelaPrincipal();
+				Clinica voltar = new Clinica();
 				voltar.setVisible(true);
 				dispose();
 
 			}
 		});
-		btnNewButton.addActionListener(new ActionListener() {
+		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// pegar a linha que esta selecionada
+				int linhaSelecionada = table.getSelectedRow();
+				if (linhaSelecionada >= 0) {// ver se tem linha selecionada na tabela
+					Medico medicoSelecionado = MedicoDAO.getMedico(linhaSelecionada);
+					String nome = medicoSelecionado.getNome();
+					textFieldNome.setText(nome);
+					String crm = medicoSelecionado.getCrm();
+					textFieldCRM.setText(crm);
+					String especialidade = medicoSelecionado.getEspecialidade();
+					textFieldEspecialidade.setText(especialidade);
+					String telefone = medicoSelecionado.getTelefone();
+					textFieldTelefone.setText(telefone);
+					String email = medicoSelecionado.getEmail();
+					textFieldEmail.setText(email);
+
+					// Desativar Botôes
+					btnCadastrarMedico.setEnabled(false);
+					btnEditar.setEnabled(false);
+					btnExcluir.setEnabled(false);
+					table.setEnabled(false);
+					// atiavar botão de finalizar Edição
+					btnFinalizarEdição.setEnabled(true);
+
+				}
 			}
 		});
 	}
