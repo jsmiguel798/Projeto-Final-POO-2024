@@ -4,25 +4,23 @@ import java.util.ArrayList;
 import consultamedica.model.*;
 
 public class MedicoDAO {
-	private static ArrayList<Medico> medicos = new ArrayList<Medico>();
-
-	public static void create(Medico medico) {
-		medicos.add(medico);
+	public void cadastrarMedico(Medico medico) {
+		Database.getClinica().getMedicos().add(medico);
 	}
-
-	public static ArrayList<Medico> list() {
-		return medicos;
-	}
-
-	public static void delete(int linha) {
-		medicos.remove(linha);
-	}
-
-	public static Medico getMedico(int linha) {
-		return medicos.get(linha);
-
-	}
-	public static void update(Medico medicos, int linha) {
 	
-		}
+	public ArrayList<Medico> listarMedicos() {
+		return Database.getClinica().getMedicos();
 	}
+	
+	public Medico getMedico(int linha) {
+		return Database.getClinica().getMedicos().get(linha);
+	}
+	
+	public void deletarMedico(int linha) {
+		Database.getClinica().getMedicos().remove(linha);
+	}
+	
+	public void editarMedico(Medico medico, int linha) {
+		Database.getClinica().getMedicos().set(linha, medico);
+	}
+}

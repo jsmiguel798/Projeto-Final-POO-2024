@@ -4,42 +4,22 @@ import java.util.ArrayList;
 
 public class Clinica {
 	private String nomeClinica;
-	private ArrayList<Paciente> listaPacientes;
-	private ArrayList<Medico> listaMedicos;
+	private ArrayList<Paciente> pacientes;
+	private ArrayList<Medico> medicos;
 	private ArrayList<Consulta> listaConsultas;
-	
 
 	public Clinica(String nomeClinica) {
 		this.nomeClinica = nomeClinica;
 
 		// criar instancia das lista de medicos, pacientes e consultas.
 
-		this.listaPacientes = new ArrayList<Paciente>();
-		this.listaMedicos = new ArrayList<Medico>();
+		this.pacientes = new ArrayList<Paciente>();
+		this.medicos = new ArrayList<Medico>();
 		this.listaConsultas = new ArrayList<Consulta>();
-
 	}
 	public Clinica() {
-		
-	}
-	// adicionar o paciente na lista de paciente na clinica
-
-
-	public void adicionarPaciente(Paciente paciente) {
-		this.listaPacientes.add(paciente);
-
-	}
-
-	// adicionar o medico na lista da clinica
-	public void adcionarMedico(Medico medico) {
-		this.listaMedicos.add(medico);
-
-	}
-
-	// adicionar a consulta na clinica
-	public void adcionarConsulta(Consulta consulta) {
-		this.listaConsultas.add(consulta);
-
+		this.pacientes = new ArrayList<Paciente>();
+		this.medicos = new ArrayList<Medico>();
 	}
 
 	public String getNomeClinica() {
@@ -49,4 +29,21 @@ public class Clinica {
 	public void setNomeClinica(String nomeClinica) {
 		this.nomeClinica = nomeClinica;
 	}
+	
+	public ArrayList<Paciente> getPacientes() {
+		return pacientes;
+	}
+	
+	public void setPacientes(ArrayList<Paciente> pacientes) {
+		this.pacientes = pacientes;
+	}
+	
+	public ArrayList<Medico> getMedicos() {
+		return medicos;
+	}
+	
+	public void setMedicos(ArrayList<Medico> medicos) {
+		this.medicos = medicos;
+	}
+	
 }

@@ -41,6 +41,8 @@ public class CadastrarMedico extends JFrame {
 	private DefaultTableModel modelo;
 	private JButton btnEditar;
 	private JButton btnExcluir;
+	
+	private MedicoDAO medicoDAO;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -60,6 +62,9 @@ public class CadastrarMedico extends JFrame {
 	 * Create the frame.
 	 */
 	public CadastrarMedico() {
+		//chamar construtor do medicoDAO
+		this.medicoDAO = new MedicoDAO();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 770, 536);
 		contentPane = new JPanel();
@@ -151,7 +156,7 @@ public class CadastrarMedico extends JFrame {
 					Medico medico = new Medico(nome, crm, especialidade, telefone, email);
 
 					// Adicionar o novo médico ao DAO
-					MedicoDAO.create(medico);
+					medicoDAO.cadastrarMedico(medico);
 
 					// Recarregar a tabela
 					carregarLinhasDaTabela();
@@ -195,7 +200,7 @@ public class CadastrarMedico extends JFrame {
 					Medico medico = new Medico(nome, CRM, telefone, especialidade, email);
 
 					// atualizar o novo paciente ao DAO
-					MedicoDAO.update(medico, linhaSelecionada);
+					medicoDAO.editarMedico(medico, linhaSelecionada);
 
 					// recarregar a tabela
 					carregarLinhasDaTabela();
@@ -271,7 +276,7 @@ public class CadastrarMedico extends JFrame {
 				int linhaSelecionada = table.getSelectedRow();
 				if (linhaSelecionada >= 0) {// ver se tem linha selecionada na tabela
 					// Apagar Da Listagem a linha Selecionada
-					MedicoDAO.delete(linhaSelecionada);
+					medicoDAO.deletarMedico(linhaSelecionada);
 					// atualizar a tabela
 					carregarLinhasDaTabela();
 				}
@@ -285,7 +290,7 @@ public class CadastrarMedico extends JFrame {
 		panel_1.add(btnVoltar);
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Clinica voltar = new Clinica();
+				ClinicaTelaPrincipal voltar = new ClinicaTelaPrincipal();
 				voltar.setVisible(true);
 				dispose();
 
@@ -296,7 +301,7 @@ public class CadastrarMedico extends JFrame {
 				// pegar a linha que esta selecionada
 				int linhaSelecionada = table.getSelectedRow();
 				if (linhaSelecionada >= 0) {// ver se tem linha selecionada na tabela
-					Medico medicoSelecionado = MedicoDAO.getMedico(linhaSelecionada);
+					Medico medicoSelecionado = medicoDAO.getMedico(linhaSelecionada);
 					String nome = medicoSelecionado.getNome();
 					textFieldNome.setText(nome);
 					String crm = medicoSelecionado.getCrm();
@@ -326,7 +331,7 @@ public class CadastrarMedico extends JFrame {
 		this.modelo.setRowCount(0);
 
 		// Adicionando os médicos na tabela
-		ArrayList<Medico> medicos = MedicoDAO.list(); // Puxando os médicos do DAO
+		ArrayList<Medico> medicos = this.medicoDAO.listarMedicos(); // Puxando os médicos do DAO
 		for (int i = 0; i < medicos.size(); i++) { // Jogando a lista de médicos no modelo da tabela
 			Medico m = medicos.get(i);
 			this.modelo.addRow(

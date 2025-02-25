@@ -6,7 +6,7 @@ public class Database {
 	private static Clinica clinica;
 
 	public void conectar() {
-		this.clinica = new Clinica();
+		this.clinica = new Clinica("MEDCENTER");
 	}
 
 	public static Clinica getClinica() {
