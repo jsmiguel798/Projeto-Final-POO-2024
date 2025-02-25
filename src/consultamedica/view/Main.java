@@ -11,7 +11,7 @@ public class Main {
 		 Database banco = new Database();
 		 banco.conectar();
 		 
-		 TelaPrincipal tl = new TelaPrincipal();
+		 Clinica tl = new Clinica();
 		 tl.setVisible(true);
 	 }catch(Exception e){
 		 System.out.println(e.getMessage());
