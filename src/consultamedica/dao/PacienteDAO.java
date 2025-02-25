@@ -22,7 +22,8 @@ public class PacienteDAO {
 		return pacientes.get(linha);
 	}
 	//
-	public static void update(Paciente paciente, int linha) {
-		pacientes.set(linha, paciente);
+
+		public static void update(Paciente paciente, int linha) {
+			pacientes.set(linha, paciente);
 	}
 }
