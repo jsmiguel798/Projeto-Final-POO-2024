@@ -35,6 +35,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import java.awt.SystemColor;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JRadioButton;
 
 public class PacienteListar extends JFrame {
 
@@ -52,27 +53,6 @@ public class PacienteListar extends JFrame {
 	private JButton btnAgendarConsulta;
 	private JButton btnCadastrarPaciente;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PacienteListar frame = new PacienteListar();
-					frame.setLocationRelativeTo(frame);
-					frame.setVisible(true);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public PacienteListar() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 922, 524);
@@ -149,7 +129,7 @@ public class PacienteListar extends JFrame {
 		textFieldMedico.setColumns(10);
 
 		btnCadastrarPaciente = new JButton("Cadastrar ");
-		btnCadastrarPaciente.setForeground(UIManager.getColor("Button.background"));
+		btnCadastrarPaciente.setForeground(Color.BLACK);
 		btnCadastrarPaciente.setBounds(611, 127, 212, 37);
 		panel.add(btnCadastrarPaciente);
 		btnCadastrarPaciente.addActionListener(new ActionListener() {
@@ -165,7 +145,7 @@ public class PacienteListar extends JFrame {
 					// isBlank() verifica se a string é vazia
 
 					// Mensagem de erro se tiver campo em branco
-					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "PopUp Dialog",
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "Cadastro",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					// Criar um objeto da classe medico
@@ -187,7 +167,7 @@ public class PacienteListar extends JFrame {
 				}
 			}
 		});
-		btnCadastrarPaciente.setBackground(SystemColor.activeCaption);
+		//btnCadastrarPaciente.setBackground(SystemColor.activeCaption);
 		btnCadastrarPaciente.setFont(new Font("Tahoma", Font.BOLD, 10));
 
 		btnFinalizarEdição = new JButton("Finalizar Edição");
@@ -209,7 +189,7 @@ public class PacienteListar extends JFrame {
 					// isBlank() verifica se a string é vazia
 
 					// Mensagem de erro se tiver campo em branco
-					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "PopUp Dialog",
+					JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "Cadastro",
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
 
@@ -284,7 +264,7 @@ public class PacienteListar extends JFrame {
 		btnAgendarConsulta = new JButton("Agendar Consulta");
 		btnAgendarConsulta.setBounds(10, 220, 168, 25);
 		panel_1.add(btnAgendarConsulta);
-		btnAgendarConsulta.setBackground(new Color(220, 220, 220));
+		//btnAgendarConsulta.setBackground(new Color(220, 220, 220));
 		btnAgendarConsulta.setFont(new Font("Tahoma", Font.BOLD, 10));
 
 		btnEditar = new JButton("Editar");
@@ -346,7 +326,7 @@ public class PacienteListar extends JFrame {
 		panel_1.add(btnVoltar);
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TelaPrincipal voltar = new TelaPrincipal();
+				Clinica voltar = new Clinica();
 				voltar.setVisible(true);
 				dispose();
 			}
@@ -354,8 +334,13 @@ public class PacienteListar extends JFrame {
 		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 10));
 
 		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 10));
+
 		btnAgendarConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				CadastrarConsulta nm = new CadastrarConsulta();
+				nm.setVisible(true);
+				dispose();
+
 			}
 		});
 
